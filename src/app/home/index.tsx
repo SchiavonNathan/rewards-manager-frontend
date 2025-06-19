@@ -1,8 +1,3 @@
-import { AppSidebar } from "@/components/app-sidebar"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
 import {
   Card,
   CardContent,
@@ -61,9 +56,6 @@ const rewards: Reward[] = [
 
 export default function Home() {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
         <div className="flex flex-col p-6">
           {/* User greeting header */}
           <div className="mb-6">
@@ -164,7 +156,5 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
   )
 }
