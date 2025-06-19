@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card"
 import { Trophy } from "lucide-react"
 
-// Mission data interface and array
 interface Mission {
   title: string;
   description: string;
@@ -36,7 +35,6 @@ const missions: Mission[] = [
   },
 ];
 
-// Reward data interface and array
 interface Reward {
   title: string;
   points: number;
@@ -84,7 +82,6 @@ export default function Home() {
               <CardContent>
                 <div className="flex flex-col">
                   <p className="text-4xl font-bold">1.250</p>
-                  <p className="text-green-500 text-sm">+0 esta semana</p>
                 </div>
               </CardContent>
             </Card>
@@ -96,7 +93,6 @@ export default function Home() {
               <CardContent>
                 <div className="flex flex-col">
                   <p className="text-4xl font-bold">#0</p>
-                  <p className="text-sm">Top 10%</p>
                 </div>
               </CardContent>
             </Card>
@@ -108,7 +104,6 @@ export default function Home() {
               <CardContent>
                 <div className="flex flex-col">
                   <p className="text-4xl font-bold">0/0</p>
-                  <p className="text-sm">0 pendentes</p>
                 </div>
               </CardContent>
             </Card>
