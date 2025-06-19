@@ -1,12 +1,11 @@
-import { ThemeProvider } from "@/components/theme-provider"
-import LoginPage from "./app/login"
+import React from 'react';
+import RoutesApp from './routes/routes';
 
-function App() {
+
+const App: React.FC = () => {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <LoginPage/>
-    </ThemeProvider>
-  )
-}
+    <RoutesApp />
+  );
+};
 
-export default App
+export default App;
