@@ -123,7 +123,7 @@ export default function Home() {
                         </div>
                         <div className="flex items-center">
                           <span className="text-amber-500 mr-2">
-                            +{mission.points} créditos
+                            +{mission.points} pontos
                           </span>
                         </div>
                       </div>
