@@ -62,7 +62,7 @@ export default function Home() {
           </div>
 
           {/* Dashboard cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <Card className="bg-card text-card-foreground">
               <CardHeader>
                 <CardTitle>Pontos Totais</CardTitle>
@@ -70,17 +70,6 @@ export default function Home() {
               <CardContent>
                 <div className="flex flex-col">
                   <p className="text-4xl font-bold">{userFullData?.points}</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card text-card-foreground">
-              <CardHeader>
-                <CardTitle>Ranking</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-col">
-                  <p className="text-4xl font-bold">#0</p>
                 </div>
               </CardContent>
             </Card>
