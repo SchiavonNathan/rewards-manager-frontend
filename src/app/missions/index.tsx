@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react"
+import { useMissions } from "@/hooks/useMissions";
+import { useEffect, useState } from "react";
+import { type Mission as ApiMission } from "@/services/missionService";
 import {
   Card,
   CardContent,
@@ -10,25 +12,18 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { 
   Target, 
-  Trophy, 
   CheckCircle2, 
   Clock, 
   Rocket, 
-  Calendar,
   Medal,
   Gift,
   Users,
   Flame
 } from "lucide-react"
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Separator } from "@radix-ui/react-separator"
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
-import { useMissions } from "@/hooks/useMissions"
 
-// Mission types
+// Mission types for the UI component
 type MissionDifficulty = "easy" | "medium" | "hard" | "extreme";
 type MissionStatus = "active" | "completed" | "upcoming";
 
@@ -43,9 +38,10 @@ interface Mission {
   current: number;
   credits: number;
   points: number;
-  deadline?: string; // ISO date string
+  deadline?: string;
   teamMission?: boolean;
   teamMembers?: { id: string; name: string; avatar: string }[];
+  team?: {name: string; id: string };
 }
 
 export default function Missions() {
@@ -53,55 +49,79 @@ export default function Missions() {
   const [missions, setMissions] = useState<Mission[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Map API missions to the component's expected format
   useEffect(() => {
-    if (apiMissions) {
-      const mappedMissions = apiMissions.map(apiMission => ({
-        id: apiMission.id,
-        title: apiMission.name,
-        description: apiMission.description,
-        difficulty: determineDifficulty(apiMission.points),
-        status: apiMission.isActive ? "active" : "completed",
-        progress: calculateProgress(apiMission),
-        total: 1,
-        current: apiMission.isActive ? 0 : 1,
-        credits: Math.floor(apiMission.points / 100),
-        points: apiMission.points,
-        deadline: apiMission.createdAt, // Using createdAt as a placeholder for deadline
-        teamMission: !!apiMission.team,
-        teamMembers: apiMission.team ? [
-          { id: "team-member", name: apiMission.team.name, avatar: "/avatars/user1.jpg" }
-        ] : undefined,
-      }));
+    if (apiMissions && apiMissions.length > 0) {
+      const transformedMissions: Mission[] = apiMissions.map((apiMission: ApiMission) => {
+        // Determine difficulty based on points
+        const difficulty = getDifficultyFromPoints(apiMission.points);
+        
+        // Determine status (active if isActive, completed otherwise)
+        const status: MissionStatus = apiMission.isActive ? "active" : "completed";
+        
+        // Calculate credits based on points (10% of points)
+        const credits = Math.max(1, Math.floor(apiMission.points / 100));
+        
+        // For demo purposes, generate random progress for active missions
+        const progress = apiMission.isActive ? Math.floor(Math.random() * 80) : 100;
+        
+        return {
+          id: apiMission.id,
+          title: apiMission.name,
+          description: apiMission.description,
+          difficulty,
+          status,
+          progress,
+          total: 1, // Default value
+          current: apiMission.isActive ? 0 : 1,
+          credits,
+          points: apiMission.points,
+          deadline: apiMission.createdAt,
+          team: apiMission.team ? {
+            name: apiMission.team.name,
+            id: apiMission.team.id
+          } : undefined,
+          teamMission: !!apiMission.team,
+          teamMembers: apiMission.team ? [
+            { 
+              id: apiMission.team.id, 
+              name: apiMission.team.name, 
+              avatar: "/avatars/user1.jpg" 
+            }
+          ] : undefined
+        };
+      });
 
-      setMissions(mappedMissions);
+      setMissions(transformedMissions);
       setLoading(false);
     }
   }, [apiMissions]);
 
   // Helper function to determine difficulty based on points
-  const determineDifficulty = (points: number): MissionDifficulty => {
-    if (points < 300) return "easy";
-    if (points < 800) return "medium";
-    if (points < 1500) return "hard";
+  const getDifficultyFromPoints = (points: number): MissionDifficulty => {
+    if (points <= 10) return "easy";
+    if (points <= 15) return "medium"; 
+    if (points <= 25) return "hard";
     return "extreme";
   };
 
-  // Helper function to calculate progress (placeholder)
-  const calculateProgress = (apiMission: any): number => {
-    return apiMission.isActive ? Math.floor(Math.random() * 80) : 100;
-  };
-
-  // Update loading state to consider API loading
+  // Use API loading state
   useEffect(() => {
     setLoading(apiLoading);
   }, [apiLoading]);
 
-  // Show error state if API returns an error
+  // Handle API errors
   if (apiError) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <p className="text-lg text-red-500">Erro ao carregar missões: {apiError}</p>
+      <div className="flex flex-col items-center justify-center p-6">
+        <div className="text-red-500 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <h2 className="text-xl font-bold">Erro ao carregar missões</h2>
+        <p className="text-muted-foreground">Tente novamente mais tarde</p>
       </div>
     );
   }
@@ -126,13 +146,6 @@ export default function Missions() {
     }
   };
 
-  const getProgressColor = (status: MissionStatus, progress: number) => {
-    if (status === "completed") return "bg-green-500";
-    if (progress < 30) return "bg-red-500";
-    if (progress < 70) return "bg-amber-500";
-    return "bg-green-500";
-  };
-
   const formatDate = (dateString?: string) => {
     if (!dateString) return "";
     const date = new Date(dateString);
@@ -145,7 +158,6 @@ export default function Missions() {
 
   const activeMissions = missions.filter(mission => mission.status === "active");
   const completedMissions = missions.filter(mission => mission.status === "completed");
-  const upcomingMissions = missions.filter(mission => mission.status === "upcoming");
 
   if (loading) {
     return (
@@ -158,28 +170,6 @@ export default function Missions() {
 
   return (
     <div className="flex flex-col p-6">
-      <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-      <div className="flex items-center gap-2 px-4">
-        <SidebarTrigger className="-ml-1" />
-          <Separator
-            orientation="vertical"
-            className="mr-2 data-[orientation=vertical]:h-4"
-          />
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href="/home">
-                Trade Rewards
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          <BreadcrumbSeparator className="hidden md:block" />
-        <BreadcrumbItem>
-          <BreadcrumbPage>Missões</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-      </header>
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold flex items-center gap-2">
@@ -268,7 +258,7 @@ export default function Missions() {
                         {mission.teamMission && (
                           <div className="flex items-center gap-1">
                             <Users className="h-4 w-4 text-blue-500" />
-                            <span className="text-sm text-muted-foreground">Missão em equipe</span>
+                            <span className="text-sm text-muted-foreground">Time {mission.team?.name}</span>
                           </div>
                         )}
                         {mission.deadline && (
@@ -282,9 +272,9 @@ export default function Missions() {
                       </div>
                       
                       <div className="flex gap-3">
-                        <Badge variant="secondary" className="flex items-center gap-1">
-                          <Trophy className="h-4 w-4 text-amber-500" />
-                          <span>{mission.points} pts</span>
+                        <Badge variant="secondary" className="flex items-center gap-1 text-amber-500">
+                          <Gift className="h-4 w-4" />
+                          <span>+{mission.points} pontos</span>
                         </Badge>
                       </div>
                     </div>
@@ -303,7 +293,7 @@ export default function Missions() {
         </TabsContent>
 
         {/* Completed missions */}
-        <TabsContent value="sended" className="space-y-4">
+        <TabsContent value="completed" className="space-y-4">
           {completedMissions.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-8">
@@ -341,13 +331,9 @@ export default function Missions() {
                       </Badge>
                       
                       <div className="flex gap-3">
-                        <Badge variant="secondary" className="flex items-center gap-1">
-                          <Trophy className="h-4 w-4 text-green-500" />
-                          <span>{mission.points} pts</span>
-                        </Badge>
                         <Badge variant="secondary" className="flex items-center gap-1 text-green-500">
                           <Gift className="h-4 w-4" />
-                          <span>+{mission.credits} créditos</span>
+                          <span>+{mission.credits} pontos</span>
                         </Badge>
                       </div>
                     </div>
