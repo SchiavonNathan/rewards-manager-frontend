@@ -14,7 +14,7 @@ export function useUserFullData() {
 
         if (userLocalStorage) {
           const userId = JSON.parse(userLocalStorage).id;
-          const userData = await userService(userId);
+          const userData = await userService.getById(userId);
 
           setUserFullData(userData);
         }

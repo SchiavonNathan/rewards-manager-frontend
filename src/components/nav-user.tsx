@@ -1,10 +1,7 @@
 "use client"
 
 import {
-  BadgeCheck,
-  Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
   Sparkles,
 } from "lucide-react"
@@ -29,6 +26,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import useLogout from "@/hooks/useLogout"
 
 export function NavUser({
   user,
@@ -40,6 +38,8 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+
+  const logout = useLogout();
 
   return (
     <SidebarMenu>
@@ -83,27 +83,12 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Sparkles />
-                Upgrade to Pro
+                Rewards
               </DropdownMenuItem>
-            </DropdownMenuGroup>
+              </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
+            <DropdownMenuItem className="cursor-pointer" onClick={logout}>
+              <LogOut  />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

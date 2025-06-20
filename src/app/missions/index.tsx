@@ -185,7 +185,6 @@ export default function Missions() {
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Target className="h-5 w-5" />
             Resumo de Progresso
           </CardTitle>
           <CardDescription>
