@@ -32,9 +32,9 @@ export function LoginForm({
   return (
     <form onSubmit={handleSubmit} className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Login to your account</h1>
+        <h1 className="text-2xl font-bold">Acesse sua conta</h1>
         <p className="text-muted-foreground text-sm text-balance">
-          Enter your email below to login to your account
+          Entre com seu email e senha para acessar o Rewards.
         </p>
       </div>
       <div className="grid gap-6">
@@ -44,7 +44,7 @@ export function LoginForm({
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Senha</Label>
           </div>
           <Input id="password" type="password" placeholder="*******" required value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} />
         </div>
