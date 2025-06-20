@@ -25,7 +25,7 @@ export function useUserData() {
         });
       }
     } catch (error) {
-      console.error("Error loading user data:", error);
+      console.error("Erro carregando dados:", error);
     }
   }, []);
 

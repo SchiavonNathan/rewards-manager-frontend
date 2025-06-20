@@ -4,6 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useUserFullData } from "@/hooks/useUserFullData";
 import { Trophy } from "lucide-react"
 
 interface Mission {
@@ -55,13 +56,16 @@ const rewards: Reward[] = [
 ];
 
 export default function Home() {
+
+  const { userFullData } = useUserFullData();
+
   return (
         <div className="flex flex-col p-6">
           {/* User greeting header */}
           <div className="mb-6">
-            <h1 className="text-3xl font-bold">Bem-vindo, João Silva!</h1>
+            <h1 className="text-3xl font-bold">Bem-vindo, {userFullData?.name}!</h1>
             <p className="text-muted-foreground">
-              Você está logado como NOC - K-2SO Protocol
+              Você está logado como {userFullData?.team?.name}
             </p>
           </div>
 
@@ -73,7 +77,7 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col">
-                  <p className="text-4xl font-bold">1.250</p>
+                  <p className="text-4xl font-bold">{userFullData?.points}</p>
                 </div>
               </CardContent>
             </Card>
