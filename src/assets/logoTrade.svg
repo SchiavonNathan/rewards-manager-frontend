@@ -1,0 +1,18 @@
+<svg width="260" height="180" viewBox="-65 -45 130 90" xmlns="http://www.w3.org/2000/svg">
+  <!-- Ícone do Controle (sem fundo) -->
+  <g id="controller-icon">
+    <!-- Corpo do controle (branco) -->
+    <path d="M -60,0 A 40,40 0 1,1 20,0 A 60,60 0 0,0 -60,0 M 60,0 A 40,40 0 1,0 -20,0 A 60,60 0 0,1 60,0 Z" fill="white"/>
+    
+    <!-- D-Pad (cruz) - stroke branco para ser visível em qualquer fundo -->
+    <path d="M -42,-5 v 10 M -47,0 h 10" stroke="white" stroke-width="4" stroke-linecap="round"/>
+    
+    <!-- Botões Coloridos -->
+    <g transform="translate(40, 0)">
+      <circle cx="0" cy="-12" r="6" fill="#00BCD4"/> <!-- Ciano -->
+      <circle cx="12" cy="0" r="6" fill="#F44336"/>  <!-- Vermelho -->
+      <circle cx="0" cy="12" r="6" fill="#9C27B0"/>  <!-- Roxo -->
+      <circle cx="-12" cy="0" r="6" fill="#CDDC39"/> <!-- Verde-Limão -->
+    </g>
+  </g>
+</svg>

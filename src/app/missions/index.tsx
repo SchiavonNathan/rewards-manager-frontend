@@ -23,6 +23,9 @@ import {
   Users,
   Flame
 } from "lucide-react"
+import { SidebarTrigger } from "@/components/ui/sidebar"
+import { Separator } from "@radix-ui/react-separator"
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 
 // Mission types
 type MissionDifficulty = "easy" | "medium" | "hard" | "extreme";
@@ -203,6 +206,28 @@ export default function Missions() {
 
   return (
     <div className="flex flex-col p-6">
+      <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+      <div className="flex items-center gap-2 px-4">
+        <SidebarTrigger className="-ml-1" />
+          <Separator
+            orientation="vertical"
+            className="mr-2 data-[orientation=vertical]:h-4"
+          />
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem className="hidden md:block">
+              <BreadcrumbLink href="/home">
+                Trade Rewards
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          <BreadcrumbSeparator className="hidden md:block" />
+        <BreadcrumbItem>
+          <BreadcrumbPage>Missões</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+      </header>
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold flex items-center gap-2">
@@ -252,13 +277,9 @@ export default function Missions() {
             <Flame className="h-4 w-4" />
             Ativas ({activeMissions.length})
           </TabsTrigger>
-          <TabsTrigger value="completed" className="flex items-center gap-1">
+          <TabsTrigger value="sended" className="flex items-center gap-1">
             <CheckCircle2 className="h-4 w-4" />
-            Concluídas ({completedMissions.length})
-          </TabsTrigger>
-          <TabsTrigger value="upcoming" className="flex items-center gap-1">
-            <Calendar className="h-4 w-4" />
-            Próximas ({upcomingMissions.length})
+            Enviadas ({completedMissions.length})
           </TabsTrigger>
         </TabsList>
 

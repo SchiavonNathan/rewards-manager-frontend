@@ -1,69 +1,61 @@
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useMissions } from "@/hooks/useMissions";
+import { useRewards } from "@/hooks/useRewards";
 import { useUserFullData } from "@/hooks/useUserFullData";
-import { Trophy } from "lucide-react"
-
-interface Mission {
-  title: string;
-  description: string;
-  credits: number;
-}
-
-const missions: Mission[] = [
-  {
-    title: "Chamados Resolvidos",
-    description: "Resolver chamados dentro dos critérios",
-    credits: 5,
-  },
-  {
-    title: "Badge IBM",
-    description: "Conquistar certificação IBM",
-    credits: 10,
-  },
-  {
-    title: "Curso de 20h ou Badge Parceiro",
-    description: "Completar curso ou conquistar badge de parceiro",
-    credits: 10,
-  },
-];
-
-interface Reward {
-  title: string;
-  points: number;
-  buttonColor: string;
-}
-
-const rewards: Reward[] = [
-  {
-    title: "Vale Almoço",
-    points: 500,
-    buttonColor: "bg-amber-500 hover:bg-amber-600",
-  },
-  {
-    title: "Dia de Folga",
-    points: 2000,
-    buttonColor: "bg-green-600 hover:bg-green-700",
-  },
-  {
-    title: "Curso Online",
-    points: 1500,
-    buttonColor: "bg-red-600 hover:bg-red-700",
-  },
-];
+import { Separator } from "@radix-ui/react-separator";
+import { SquareTerminal, Trophy } from "lucide-react"
 
 export default function Home() {
 
-  const { userFullData } = useUserFullData();
+  const { userFullData, loading: userFullDataLoading, error: userFullDataError } = useUserFullData();
+  const { missions, loading: missionsLoading, error: missionsError } = useMissions();
+  const { rewards, loading: rewardsLoading, error: rewardsError } = useRewards();
+
+  if (missionsLoading || rewardsLoading || userFullDataLoading) {
+    return <div>Carregando dados...</div>;
+  }
+
+  if (missionsError || rewardsError || userFullDataError) {
+    return <div>Erro ao carregar dados</div>;
+  }
 
   return (
         <div className="flex flex-col p-6">
           {/* User greeting header */}
+          <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator
+              orientation="vertical"
+              className="mr-2 data-[orientation=vertical]:h-4"
+            />
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem className="hidden md:block">
+                  <BreadcrumbLink href="#">
+                    Trade Rewards
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="hidden md:block" />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Home</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+          </header>
           <div className="mb-6">
-            <h1 className="text-3xl font-bold">Bem-vindo, {userFullData?.name}!</h1>
+            <h1 className="text-3xl font-bold flex items-center gap-2">
+              <SquareTerminal className="h-8 w-8 text-blue-500" />
+              Bem-vindo, {userFullData?.name}!
+            </h1>
             <p className="text-muted-foreground">
               Você está logado como {userFullData?.team?.name}
             </p>
@@ -99,7 +91,12 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col">
-                  <p className="text-4xl font-bold">0/0</p>
+                  <p className="text-4xl font-bold">
+                    {missions.filter(mission => mission.isActive).length}/{missions.length}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {missions.filter(mission => mission.isActive).length} ativas
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -115,18 +112,18 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Map through missions array */}
-                  {missions.map((mission, index) => (
-                    <div key={index} className="space-y-2">
+                  {missions.map((mission, id) => (
+                    <div key={id} className="space-y-2">
                       <div className="flex justify-between items-center">
                         <div>
-                          <h3 className="font-semibold">{mission.title}</h3>
+                          <h3 className="font-semibold">{mission.name}</h3>
                           <p className="text-sm text-muted-foreground">
                             {mission.description}
                           </p>
                         </div>
                         <div className="flex items-center">
                           <span className="text-amber-500 mr-2">
-                            +{mission.credits} créditos
+                            +{mission.points} créditos
                           </span>
                         </div>
                       </div>
@@ -145,12 +142,12 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Map through rewards array */}
-                  {rewards.map((reward, index) => (
-                    <Card key={index}>
+                  {rewards.map((reward, id) => (
+                    <Card key={id}>
                       <CardContent className="p-3">
-                        <h3 className="font-semibold">{reward.title}</h3>
+                        <h3 className="font-semibold">{reward.name}</h3>
                         <p className="text-sm text-muted-foreground mb-2">
-                          {reward.points} pontos
+                          {reward.points_cost} pontos
                         </p>
                       </CardContent>
                     </Card>

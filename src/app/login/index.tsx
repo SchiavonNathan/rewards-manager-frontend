@@ -1,4 +1,3 @@
-import { GalleryVerticalEnd } from "lucide-react"
 import { LoginForm } from "@/components/login-form"
 
 export default function LoginPage() {
@@ -8,7 +7,7 @@ export default function LoginPage() {
         <div className="flex justify-center gap-2 md:justify-start">
           <a href="#" className="flex items-center gap-2 font-medium">
             <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-              <GalleryVerticalEnd className="size-4" />
+              <img src="../assets/trade-logo.svg" alt="Trade Logo" className="h-4 w-4" />
             </div>
             Trade Technology
           </a>
