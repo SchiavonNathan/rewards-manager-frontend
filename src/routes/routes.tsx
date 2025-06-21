@@ -1,7 +1,8 @@
-import Home from '@/app/home';
-import LoginPage from '@/app/login';
-import Missions from '@/app/missions';
-import Ranking from '@/app/ranking';
+import AdminLoginPage from '@/app/admin/login';
+import Home from '@/app/user/home';
+import LoginPage from '@/app/user/login';
+import Missions from '@/app/user/missions';
+import Ranking from '@/app/user/ranking';
 import RootLayout from '@/components/layout';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -12,6 +13,7 @@ const RoutesApp: React.FC = () => {
       <Routes>
         {/* Public route without sidebar */}
         <Route path="/" element={<LoginPage />} />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
         
         {/* Routes with sidebar */}
         <Route element={<RootLayout />}>

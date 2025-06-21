@@ -1,6 +1,7 @@
 import * as React from "react"
 import { useUserData } from "@/hooks/useUserData"
 import {
+  Atom,
   Command,
   Frame,
   LifeBuoy,
@@ -48,16 +49,6 @@ const staticData = {
       title: "Configurações",
       url: "#",
       icon: Settings2,
-      items: [
-        {
-          title: "Geral",
-          url: "#",
-        },
-        {
-          title: "Time",
-          url: "#",
-        }
-      ],
     },
   ],
   navSecondary: [
@@ -87,7 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton size="lg" asChild>
               <a href="/home">
                 <div className=" text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <img src={logo} alt="Trade Logo" className="h-10 w-10" />
+                  <Atom className="size-5" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">Trade Technology</span>

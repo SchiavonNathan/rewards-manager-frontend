@@ -18,10 +18,6 @@ export default function Home() {
   const { missions, loading: missionsLoading, error: missionsError } = useMissions();
   const { rewards, loading: rewardsLoading, error: rewardsError } = useRewards();
 
-  if (missionsLoading || rewardsLoading || userFullDataLoading) {
-    return <div>Carregando dados...</div>;
-  }
-
   if (missionsError || rewardsError || userFullDataError) {
     return <div>Erro ao carregar dados</div>;
   }
@@ -69,7 +65,7 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col">
-                  <p className="text-4xl font-bold">{userFullData?.points}</p>
+                  <p className="text-4xl font-bold">{userFullData?.points} pts</p>
                 </div>
               </CardContent>
             </Card>

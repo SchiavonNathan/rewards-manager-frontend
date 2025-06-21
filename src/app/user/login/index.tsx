@@ -1,5 +1,6 @@
 import { LoginForm } from "@/components/login-form"
 import { motion } from "framer-motion"
+import { Atom } from "lucide-react"
 
 export default function LoginPage() {
   return (
@@ -15,10 +16,10 @@ export default function LoginPage() {
             transition={{ duration: 0.5 }}
             className="flex justify-center gap-2 md:justify-start"
           >
+            <div className="bg-blue-600 text-white flex size-8 items-center justify-center rounded-lg shadow-sm">
+              <Atom size={18} />
+            </div>
             <a href="#" className="flex items-center gap-2.5 font-medium">
-              <div className="text-primary-foreground flex size-8 items-center justify-center rounded-lg shadow-sm">
-                
-              </div>
               <span className="text-xl font-semibold tracking-tight">Trade Technology</span>
             </a>
           </motion.div>
