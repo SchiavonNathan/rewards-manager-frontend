@@ -19,7 +19,7 @@ export const missionService = {
     try {
       const response = await api.get("/missions");
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error("Ocorreu um erro ao consultar missões.");
     }
   },
@@ -28,7 +28,7 @@ export const missionService = {
     try {
       const response = await api.get(`/missions/${id}`);
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error("Ocorreu um erro ao consultar missão.");
     }
   }

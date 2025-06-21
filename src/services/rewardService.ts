@@ -19,7 +19,7 @@ export const rewardService = {
     try {
       const response = await api.get("/rewards");
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error("Ocorreu um erro ao consultar recompensas.");
     }
   },
@@ -28,7 +28,7 @@ export const rewardService = {
     try {
       const response = await api.get(`/rewards/${id}`);
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error("Ocorreu um erro ao consultar recompensa.");
     }
   }

@@ -16,7 +16,7 @@ export const loginService =  async (credentials: LoginCredentials): Promise<User
     try {
         const response =  await api.post('/auth/login', credentials);
         return response.data;
-    } catch (error) {
+    } catch {
         throw new Error("Ocorreu um erro ao tentar fazer login.");
     }
 };

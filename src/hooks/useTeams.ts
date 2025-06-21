@@ -55,7 +55,7 @@ export function useTeams() {
           team.totalPoints += user.points;
         });
         
-        let teamsArray = Array.from(teamMap.values());
+        const teamsArray = Array.from(teamMap.values());
         teamsArray.sort((a, b) => b.totalPoints - a.totalPoints);
         
         teamsArray.forEach(team => {

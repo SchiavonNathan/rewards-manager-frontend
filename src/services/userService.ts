@@ -26,7 +26,7 @@ export const userService = {
     try {
       const response = await api.get(`/users/${id}`);
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error("Ocorreu um erro ao consultar dados do usuário.");
     }
   },
@@ -35,7 +35,7 @@ export const userService = {
     try {
       const response = await api.get("/users");
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error("Ocorreu um erro ao consultar usuários.");
     }
   }
