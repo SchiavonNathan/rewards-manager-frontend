@@ -2,7 +2,6 @@ import * as React from "react"
 import { useUserData } from "@/hooks/useUserData"
 import {
   Atom,
-  Command,
   Frame,
   LifeBuoy,
   Rocket,
@@ -24,7 +23,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import logo from "@/assets/logoTrade.svg";
 
 
 const staticData = {

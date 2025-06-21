@@ -14,9 +14,9 @@ import { SquareTerminal, Trophy } from "lucide-react"
 
 export default function Home() {
 
-  const { userFullData, loading: userFullDataLoading, error: userFullDataError } = useUserFullData();
-  const { missions, loading: missionsLoading, error: missionsError } = useMissions();
-  const { rewards, loading: rewardsLoading, error: rewardsError } = useRewards();
+  const { userFullData, error: userFullDataError } = useUserFullData();
+  const { missions, error: missionsError } = useMissions();
+  const { rewards, error: rewardsError } = useRewards();
 
   if (missionsError || rewardsError || userFullDataError) {
     return <div>Erro ao carregar dados</div>;
