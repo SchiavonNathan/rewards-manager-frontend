@@ -20,13 +20,13 @@ import {
   Medal,
   Gift,
   Users,
-  Flame
+  Flame,
+  DollarSign
 } from "lucide-react"
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 
-// Mission types for the UI component
 type MissionDifficulty = "easy" | "medium" | "hard" | "extreme";
 type MissionStatus = "active" | "completed" | "upcoming";
 
@@ -36,14 +36,8 @@ interface Mission {
   description: string;
   difficulty: MissionDifficulty;
   status: MissionStatus;
-  progress: number;
-  total: number;
-  current: number;
-  credits: number;
   points: number;
   deadline?: string;
-  teamMission?: boolean;
-  teamMembers?: { id: string; name: string; avatar: string }[];
   team?: {name: string; id: string };
 }
 
@@ -55,17 +49,9 @@ export default function Missions() {
   useEffect(() => {
     if (apiMissions && apiMissions.length > 0) {
       const transformedMissions: Mission[] = apiMissions.map((apiMission: ApiMission) => {
-        // Determine difficulty based on points
         const difficulty = getDifficultyFromPoints(apiMission.points);
         
-        // Determine status (active if isActive, completed otherwise)
         const status: MissionStatus = apiMission.isActive ? "active" : "completed";
-        
-        // Calculate credits based on points (10% of points)
-        const credits = Math.max(1, Math.floor(apiMission.points / 100));
-        
-        // For demo purposes, generate random progress for active missions
-        const progress = apiMission.isActive ? Math.floor(Math.random() * 80) : 100;
         
         return {
           id: apiMission.id,
@@ -73,24 +59,13 @@ export default function Missions() {
           description: apiMission.description,
           difficulty,
           status,
-          progress,
-          total: 1, // Default value
-          current: apiMission.isActive ? 0 : 1,
-          credits,
+          total: 1,
           points: apiMission.points,
           deadline: apiMission.createdAt,
           team: apiMission.team ? {
             name: apiMission.team.name,
             id: apiMission.team.id
           } : undefined,
-          teamMission: !!apiMission.team,
-          teamMembers: apiMission.team ? [
-            { 
-              id: apiMission.team.id, 
-              name: apiMission.team.name, 
-              avatar: "/avatars/user1.jpg" 
-            }
-          ] : undefined
         };
       });
 
@@ -99,7 +74,6 @@ export default function Missions() {
     }
   }, [apiMissions]);
 
-  // Helper function to determine difficulty based on points
   const getDifficultyFromPoints = (points: number): MissionDifficulty => {
     if (points <= 10) return "easy";
     if (points <= 15) return "medium"; 
@@ -107,12 +81,10 @@ export default function Missions() {
     return "extreme";
   };
 
-  // Use API loading state
   useEffect(() => {
     setLoading(apiLoading);
   }, [apiLoading]);
 
-  // Handle API errors
   if (apiError) {
     return (
       <div className="flex flex-col items-center justify-center p-6">
@@ -133,8 +105,8 @@ export default function Missions() {
     switch(difficulty) {
       case "easy": return "bg-green-500 text-white";
       case "medium": return "bg-blue-500 text-white";
-      case "hard": return "bg-amber-500 text-white";
-      case "extreme": return "bg-red-500 text-white";
+      case "hard": return "bg-red-500 text-white";
+      case "extreme": return "bg-red-800 text-white";
       default: return "bg-gray-500 text-white";
     }
   };
@@ -279,15 +251,13 @@ export default function Missions() {
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-2">
-                        {mission.teamMission && (
-                          <div className="flex items-center gap-1">
-                            <Users className="h-4 w-4 text-blue-500" />
-                            <span className="text-sm text-muted-foreground">Time {mission.team?.name}</span>
-                          </div>
-                        )}
+                        <div className="flex items-center gap-1">
+                          <Users className="h-4 w-4 text-blue-300" />
+                          <span className="text-sm text-muted-foreground">Time {mission.team?.name}</span>
+                        </div>
                         {mission.deadline && (
                           <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4 text-amber-500" />
+                            <Clock className="h-4 w-4 text-blue-300" />
                             <span className="text-sm text-muted-foreground">
                               Prazo: {formatDate(mission.deadline)}
                             </span>
@@ -296,8 +266,8 @@ export default function Missions() {
                       </div>
                       
                       <div className="flex gap-3">
-                        <Badge variant="secondary" className="flex items-center gap-1 text-amber-500">
-                          <Gift className="h-4 w-4" />
+                        <Badge variant="secondary" className="flex items-center gap-1 text-green-500">
+                          <DollarSign className="h-4 w-4" />
                           <span>+{mission.points} pontos</span>
                         </Badge>
                       </div>
@@ -357,7 +327,7 @@ export default function Missions() {
                       <div className="flex gap-3">
                         <Badge variant="secondary" className="flex items-center gap-1 text-green-500">
                           <Gift className="h-4 w-4" />
-                          <span>+{mission.credits} pontos</span>
+                          <span>+{mission.points} pontos</span>
                         </Badge>
                       </div>
                     </div>

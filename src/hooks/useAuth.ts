@@ -1,4 +1,3 @@
-// src/hooks/useAuth.ts
 import { useState } from "react";
 import { loginService, type LoginCredentials, type User } from "@/services/loginService";
 import { useNavigate } from "react-router-dom";

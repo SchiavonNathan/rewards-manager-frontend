@@ -40,9 +40,6 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">+2,350</div>
-                <p className="text-xs text-muted-foreground">
-                  +180 desde o último mês
-                </p>
               </CardContent>
             </Card>
             
@@ -53,9 +50,6 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">+12,234</div>
-                <p className="text-xs text-muted-foreground">
-                  +19% desde o último mês
-                </p>
               </CardContent>
             </Card>
             
@@ -66,9 +60,6 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">+573</div>
-                <p className="text-xs text-muted-foreground">
-                  +201 desde o último mês
-                </p>
               </CardContent>
             </Card>
             
@@ -79,9 +70,6 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">1,324</div>
-                <p className="text-xs text-muted-foreground">
-                  +18% desde o último mês
-                </p>
               </CardContent>
             </Card>
           </div>

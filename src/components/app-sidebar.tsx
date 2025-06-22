@@ -3,6 +3,7 @@ import { useUserData } from "@/hooks/useUserData"
 import {
   Atom,
   Frame,
+  Gift,
   LifeBuoy,
   Rocket,
   Settings2,
@@ -42,6 +43,11 @@ const staticData = {
       title: "Missões",
       url: "/missions",
       icon: Rocket,
+    },
+    {
+      title: "Recompensas",
+      url: "/rewards",
+      icon: Gift,
     },
     {
       title: "Configurações",

@@ -83,7 +83,7 @@ export default function Ranking() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold flex items-center gap-2">
-          <Trophy className="h-8 w-8 text-amber-500" />
+          <Trophy className="h-8 w-8 text-blue-500" />
           Ranking de Equipes
         </h1>
         <p className="text-muted-foreground">

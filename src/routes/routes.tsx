@@ -11,6 +11,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AdminTeams from '@/app/admin/teams';
 import AdminMissions from '@/app/admin/missions';
+import Rewards from '@/app/user/rewards';
 
 const RoutesApp: React.FC = () => {
   return (
@@ -24,6 +25,7 @@ const RoutesApp: React.FC = () => {
           <Route path="/ranking" element={<Ranking />} />
           <Route path="/missions" element={<Missions />} />
           <Route path="/settings" element={<div>Settings Page</div>} />
+          <Route path="/rewards" element={<Rewards />} />
         </Route>
 
         <Route element={<AdminLayout />}>
