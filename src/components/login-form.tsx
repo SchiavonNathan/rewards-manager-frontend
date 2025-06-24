@@ -49,7 +49,7 @@ export function LoginForm({
           <Input id="password" type="password" placeholder="*******" required value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} />
         </div>
         {error && <p className="text-sm text-red-500">{error}</p>}
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
           {isLoading ? "Entrando..." : "Login"}
         </Button>
       </div>

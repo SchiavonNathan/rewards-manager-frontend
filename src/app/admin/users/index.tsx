@@ -48,68 +48,17 @@ import {
   Filter
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { useAllUsers } from "@/hooks/useAllUsers"
 
 export default function AdminUsers() {
-  const [users] = useState([
-    { 
-      id: "1", 
-      name: "Nathan Lopes", 
-      email: "nathan.lopes@tradetechnology.com.br", 
-      username: "nathan.lopes", 
-      team: "NOC", 
-      role: "USER", 
-      points: 1950, 
-      isActive: true 
-    },
-    { 
-      id: "2", 
-      name: "Marina Silva", 
-      email: "marina.silva@tradetechnology.com.br", 
-      username: "marina.silva", 
-      team: "DevOps", 
-      role: "USER", 
-      points: 2450, 
-      isActive: true 
-    },
-    { 
-      id: "3", 
-      name: "Carlos Menezes", 
-      email: "carlos.menezes@tradetechnology.com.br", 
-      username: "carlos.menezes", 
-      team: "Security", 
-      role: "USER", 
-      points: 1750, 
-      isActive: true 
-    },
-    { 
-      id: "4", 
-      name: "Sandra Pereira", 
-      email: "sandra.pereira@tradetechnology.com.br", 
-      username: "sandra.pereira", 
-      team: "Support", 
-      role: "USER", 
-      points: 1580, 
-      isActive: false 
-    },
-    { 
-      id: "5", 
-      name: "João Almeida", 
-      email: "joao.almeida@tradetechnology.com.br", 
-      username: "joao.almeida", 
-      team: "Development", 
-      role: "ADM", 
-      points: 1650, 
-      isActive: true 
-    },
-  ])
-  
+  const { allUsers } = useAllUsers();
   const [searchTerm, setSearchTerm] = useState('')
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
 
-  const filteredUsers = users.filter(user => 
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.team.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUsers = allUsers?.filter(user => 
+    user?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user?.team?.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   return (
@@ -193,7 +142,7 @@ export default function AdminUsers() {
         <CardHeader className="pb-2">
           <CardTitle>Usuários</CardTitle>
           <CardDescription>
-            Gerencie os usuários do sistema. Total: {users.length} usuários.
+            Gerencie os usuários do sistema. Total: {allUsers?.length} usuários.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -205,7 +154,7 @@ export default function AdminUsers() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <Search className="h-4 w-4 text-muted-foreground" />
+              <Search className="ml-2 h-4 w-4 text-muted-foreground" />
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" className="h-9">
@@ -230,21 +179,21 @@ export default function AdminUsers() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredUsers.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell className="font-medium">{user.name}</TableCell>
-                    <TableCell>{user.username}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.team}</TableCell>
+                {filteredUsers?.map((user) => (
+                  <TableRow key={user?.id}>
+                    <TableCell className="font-medium">{user?.name}</TableCell>
+                    <TableCell>{user?.username}</TableCell>
+                    <TableCell>{user?.email}</TableCell>
+                    <TableCell>{user?.team?.name}</TableCell>
                     <TableCell>
-                      <Badge variant={user.role === "ADM" ? "default" : "outline"}>
-                        {user.role === "ADM" ? "Admin" : "Usuário"}
+                      <Badge variant={user?.role === "ADM" ? "default" : "outline"}>
+                        {user?.role === "ADM" ? "Admin" : "Usuário"}
                       </Badge>
                     </TableCell>
-                    <TableCell>{user.points}</TableCell>
+                    <TableCell>{user?.points}</TableCell>
                     <TableCell>
-                      <Badge variant={user.isActive ? "default" : "destructive"}>
-                        {user.isActive ? "Ativo" : "Inativo"}
+                      <Badge variant={user?.isActive ? "default" : "destructive"}>
+                        {user?.isActive ? "Ativo" : "Inativo"}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -269,7 +218,7 @@ export default function AdminUsers() {
                     </TableCell>
                   </TableRow>
                 ))}
-                {filteredUsers.length === 0 && (
+                {filteredUsers?.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={8} className="h-24 text-center">
                       Nenhum usuário encontrado.

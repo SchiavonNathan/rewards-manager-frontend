@@ -10,7 +10,7 @@ import { useMissions } from "@/hooks/useMissions";
 import { useRewards } from "@/hooks/useRewards";
 import { useUserFullData } from "@/hooks/useUserFullData";
 import { Separator } from "@radix-ui/react-separator";
-import { DollarSign, SquareTerminal, Trophy } from "lucide-react"
+import { SquareTerminal, Trophy } from "lucide-react"
 
 export default function Home() {
 
@@ -107,7 +107,6 @@ export default function Home() {
                           </p>
                         </div>
                         <div className="flex items-center">
-                          <DollarSign className="h-4 w-4 text-green-500 mr-2" />
                           <span className="text-green-500 mr-2">
                             +{mission.points} pontos
                           </span>

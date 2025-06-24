@@ -21,7 +21,6 @@ import {
   Gift,
   Users,
   Flame,
-  DollarSign
 } from "lucide-react"
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
@@ -267,7 +266,6 @@ export default function Missions() {
                       
                       <div className="flex gap-3">
                         <Badge variant="secondary" className="flex items-center gap-1 text-green-500">
-                          <DollarSign className="h-4 w-4" />
                           <span>+{mission.points} pontos</span>
                         </Badge>
                       </div>
