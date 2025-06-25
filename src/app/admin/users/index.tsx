@@ -49,17 +49,49 @@ import {
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { useAllUsers } from "@/hooks/useAllUsers"
+import { useTeams } from "@/hooks/useTeams"
+import { useCreateUser } from "@/hooks/useCreateUser"
 
 export default function AdminUsers() {
   const { allUsers } = useAllUsers();
   const [searchTerm, setSearchTerm] = useState('')
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [username, setUsername] = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [team, setTeam] = useState('')
+  const [role, setRole] = useState('USER')
+  const [password, setPassword] = useState('')
+
+  const { teams } = useTeams();
+
 
   const filteredUsers = allUsers?.filter(user => 
     user?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user?.team?.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  const { createUser } = useCreateUser();
+
+  const handleAddUser = async () => {
+    const user = {
+      username,
+      name,
+      email,
+      team,
+      role,
+      points: 0,
+      password
+    };
+    try {
+      await createUser(user);
+      console.log("Usuário adicionado com sucesso:", user);
+      setIsAddDialogOpen(false);
+    } catch (err) {
+      console.error("Falha ao adicionar usuário:", err);
+    }
+  };
 
   return (
     <div className="flex-1 space-y-4 p-6">
@@ -84,55 +116,64 @@ export default function AdminUsers() {
                 <Label htmlFor="name" className="text-right">
                   Nome
                 </Label>
-                <Input id="name" placeholder="Nome completo" className="col-span-3" />
+                <Input id="name" placeholder="Nome completo" className="col-span-3" value={name} onChange={(e) => setName(e.target.value)} />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="email" className="text-right">
                   Email
                 </Label>
-                <Input id="email" placeholder="email@tradetechnology.com.br" className="col-span-3" />
+                <Input id="email" placeholder="email@tradetechnology.com.br" className="col-span-3" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="username" className="text-right">
                   Username
                 </Label>
-                <Input id="username" placeholder="nome.sobrenome" className="col-span-3" />
+                <Input id="username" placeholder="nome.sobrenome" className="col-span-3" value={username} onChange={(e) => setUsername(e.target.value)} />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="username" className="text-right">
+                  Senha
+                </Label>
+                <Input id="password" placeholder="Digite a senha" className="col-span-3" value={password} onChange={(e) => setPassword(e.target.value)} />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="team" className="text-right">
                   Equipe
                 </Label>
-                <Select>
+                <Select value={team} onValueChange={setTeam}>
                   <SelectTrigger className="col-span-3">
                     <SelectValue placeholder="Selecione uma equipe" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="noc">NOC</SelectItem>
-                    <SelectItem value="devops">DevOps</SelectItem>
-                    <SelectItem value="security">Security</SelectItem>
-                    <SelectItem value="support">Support</SelectItem>
-                    <SelectItem value="development">Development</SelectItem>
+                    {teams.map((team) => (
+                      <SelectItem key={team.id} value={team.id}>
+                        {team.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
+              <div className="grid grid-cols-4 items-center gap-4" >
                 <Label htmlFor="role" className="text-right">
                   Função
                 </Label>
-                <Select>
+                <Select value={role} onValueChange={setRole}>
                   <SelectTrigger className="col-span-3">
                     <SelectValue placeholder="Selecione uma função" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="user">Usuário</SelectItem>
-                    <SelectItem value="admin">Administrador</SelectItem>
+                    <SelectItem value="USER">Usuário</SelectItem>
+                    <SelectItem value="ADM">Administrador</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>Cancelar</Button>
-              <Button>Salvar</Button>
+              <Button   onClick={() => {
+                setIsAddDialogOpen(false); 
+                handleAddUser();
+              }}>Salvar</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

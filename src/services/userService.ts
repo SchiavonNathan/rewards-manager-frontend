@@ -21,6 +21,15 @@ export interface User {
   team?: Team;
 }
 
+export interface UserCreate {
+  username: string;
+  name: string;
+  email: string;
+  role: string;
+  teamId?: string;
+  password: string;
+}
+
 export const userService = {
   async getById(id: string): Promise<User> {
     try {
@@ -38,5 +47,14 @@ export const userService = {
     } catch {
       throw new Error("Ocorreu um erro ao consultar usuários.");
     }
-  }
+  },
+
+  async create(user: UserCreate): Promise<User> {
+    try {
+      const response = await api.post("/users", user);
+      return response.data;
+    } catch {
+      throw new Error("Ocorreu um erro ao criar o usuário.");
+    }
+  },
 };
