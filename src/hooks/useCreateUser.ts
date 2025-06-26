@@ -12,7 +12,11 @@ export function useCreateUser() {
             const response = await userService.create(user);
             return response;
         } catch (err) {
-            setError(err.message || "Ocorreu um erro ao criar o usuário.");
+            if (err && typeof err === "object" && "message" in err) {
+                setError((err as { message: string }).message || "Ocorreu um erro ao criar o usuário.");
+            } else {
+                setError("Ocorreu um erro ao criar o usuário.");
+            }
             throw err;
         } finally {
             setLoading(false);
