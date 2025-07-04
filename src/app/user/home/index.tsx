@@ -59,16 +59,13 @@ export default function Home() {
             </Card>
           </div>
 
-          {/* Main content split into two sections */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Missões Ativas section - takes 2/3 of width on large screens */}
             <div className="lg:col-span-2">
               <Card className="bg-card text-card-foreground">
                 <CardHeader className="flex flex-row items-center">
                   <CardTitle>Missões Ativas</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {/* Map through missions array */}
                   {missions.map((mission, id) => (
                     <div key={id} className="space-y-2">
                       <div className="flex justify-between items-center">
@@ -90,7 +87,6 @@ export default function Home() {
               </Card>
             </div>
 
-            {/* Recompensas section - takes 1/3 of width on large screens */}
             <div className="lg:col-span-1">
               <Card className="bg-card text-card-foreground mb-6">
                 <CardHeader className="flex flex-row items-center">
@@ -98,7 +94,6 @@ export default function Home() {
                   <CardTitle>Recompensas</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {/* Map through rewards array */}
                   {rewards.map((reward, id) => (
                     <Card key={id}>
                       <CardContent className="p-3">

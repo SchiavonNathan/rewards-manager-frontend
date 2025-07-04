@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { CalendarIcon, DownloadIcon, UsersIcon, TrophyIcon, RocketIcon, GiftIcon } from "lucide-react"
 
 export default function AdminDashboard() {
-  // Example data for charts
 
   return (
     <div className="flex-1 space-y-4 p-6">

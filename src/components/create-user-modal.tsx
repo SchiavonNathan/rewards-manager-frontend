@@ -6,7 +6,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -18,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { UserPlus } from "lucide-react";
 import { useCreateUser } from "@/hooks/useCreateUser";
 import type { Errors } from "@/types/errors.types";
 import { useAllUsers } from "@/hooks/useAllUsers";
@@ -30,10 +28,12 @@ interface Team {
 
 interface CreateUserModalProps {
   teams: Team[];
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+  onSuccess?: () => void;
 }
 
-export function CreateUserModal({ teams }: CreateUserModalProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export function CreateUserModal({ teams, isOpen, onOpenChange, onSuccess }: CreateUserModalProps) {
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -81,8 +81,12 @@ export function CreateUserModal({ teams }: CreateUserModalProps) {
     try {
       await createUser(userPayload);
       console.log("Usuário adicionado com sucesso:", userPayload);
-      setIsOpen(false);
-      refetch();
+      onOpenChange(false);
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        refetch();
+      }
     } catch (err) {
       console.error("Falha ao adicionar usuário:", err);
       setErrors({ form: "Ocorreu um erro ao salvar o usuário. Tente novamente." });
@@ -90,19 +94,13 @@ export function CreateUserModal({ teams }: CreateUserModalProps) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(isOpen) => {
-          setIsOpen(isOpen);
-          if (!isOpen) {
+    <Dialog open={isOpen} onOpenChange={(open) => {
+          onOpenChange(open);
+          if (!open) {
             resetForm();
             setErrors({});
           }
         }}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
-              <UserPlus className="h-4 w-4" />
-              Adicionar Usuário
-            </Button>
-          </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <form onSubmit={handleAddUser}>
             <DialogHeader>

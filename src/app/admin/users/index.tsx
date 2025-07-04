@@ -28,7 +28,8 @@ import {
   Search, 
   Edit, 
   Trash2, 
-  Filter
+  Filter,
+  UserPlus
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { useAllUsers } from "@/hooks/useAllUsers"
@@ -37,6 +38,16 @@ import { CreateUserModal } from "@/components/create-user-modal"
 import { UpdateUserModal } from "@/components/update-user-modal"
 import type { User } from "@/services/userService"
 import { useDeleteUser } from "@/hooks/useDeleteUser"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from "@/components/ui/alert-dialog"
 
 
 
@@ -46,6 +57,9 @@ export default function AdminUsers() {
   const { teams } = useTeams();
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const { deleteUser } = useDeleteUser();
 
   const handleEditUser = (user: User) => {
@@ -53,18 +67,23 @@ export default function AdminUsers() {
     setIsUpdateModalOpen(true);
   };
 
-  const handleDeleteUser = (user: User) => {
-    deleteUser(user.id)
-    refetch();
+  const handleOpenDeleteDialog = (user: User) => {
+    setUserToDelete(user);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDeleteUser = async () => {
+    if (userToDelete) {
+      await deleteUser(userToDelete.id);
+      setIsDeleteDialogOpen(false);
+      setUserToDelete(null);
+      refetch();
+    }
   };
 
   const handleCloseUpdateModal = () => {
     setIsUpdateModalOpen(false);
     setEditingUser(null);
-  };
-
-  const handleUpdateSuccess = () => {
-    refetch();
   };
 
   const filteredUsers = allUsers?.filter(user => 
@@ -77,7 +96,10 @@ export default function AdminUsers() {
     <div className="flex-1 space-y-4 p-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Gerenciamento de Usuários</h1>
-        <CreateUserModal teams={teams || []}  />
+        <Button className="gap-2" onClick={() => setIsCreateModalOpen(true)}>
+          <UserPlus className="h-4 w-4" />
+          Adicionar Usuário
+        </Button>
       </div>
       <Card>
         <CardHeader className="pb-2">
@@ -155,7 +177,7 @@ export default function AdminUsers() {
                           </DropdownMenuItem>
                           <DropdownMenuItem 
                             className="cursor-pointer text-red-600"
-                            onClick={() => user && handleDeleteUser(user)}  
+                            onClick={() => user && handleOpenDeleteDialog(user)}
                           >
                             <Trash2 className="mr-2 h-4 w-4" />
                             Excluir
@@ -178,16 +200,43 @@ export default function AdminUsers() {
         </CardContent>
       </Card>
       
-      {/* Update User Modal */}
       {editingUser && (
         <UpdateUserModal
           teams={teams || []}
           user={editingUser}
           isOpen={isUpdateModalOpen}
           onClose={handleCloseUpdateModal}
-          onSuccess={handleUpdateSuccess}
+          onSuccess={refetch}
         />
       )}
+      
+      <CreateUserModal
+        teams={teams || []}
+        isOpen={isCreateModalOpen}
+        onOpenChange={setIsCreateModalOpen}
+        onSuccess={refetch}
+      />
+
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir o usuário {userToDelete?.name}?
+              Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setUserToDelete(null)}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction 
+              className="bg-red-600 hover:bg-red-700"
+              onClick={handleDeleteUser}
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
