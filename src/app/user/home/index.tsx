@@ -1,15 +1,12 @@
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useMissions } from "@/hooks/useMissions";
 import { useRewards } from "@/hooks/useRewards";
 import { useUserFullData } from "@/hooks/useUserFullData";
-import { Separator } from "@radix-ui/react-separator";
 import { SquareTerminal, Trophy } from "lucide-react"
 
 export default function Home() {
@@ -25,28 +22,6 @@ export default function Home() {
   return (
         <div className="flex flex-col p-6">
           {/* User greeting header */}
-          <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator
-              orientation="vertical"
-              className="mr-2 data-[orientation=vertical]:h-4"
-            />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Trade Rewards
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Home</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
-          </header>
           <div className="mb-6">
             <h1 className="text-3xl font-bold flex items-center gap-2">
               <SquareTerminal className="h-8 w-8 text-blue-500" />
@@ -77,9 +52,6 @@ export default function Home() {
               <CardContent>
                 <div className="flex flex-col">
                   <p className="text-4xl font-bold">
-                    {missions.filter(mission => mission.isActive).length}/{missions.length}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
                     {missions.filter(mission => mission.isActive).length} ativas
                   </p>
                 </div>

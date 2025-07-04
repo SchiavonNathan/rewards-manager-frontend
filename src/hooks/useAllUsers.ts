@@ -6,25 +6,29 @@ export function useAllUsers() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        setLoading(true);
-        const response = await userService.getAll();
+  const fetchUserData = async () => {
+    try {
+      setLoading(true);
+      const response = await userService.getAll();
 
-        if (response) {
-          setAllUsers(response);
-        }
-      } catch (err) {
-        console.error("Erro carregando dados:", err);
-        setError("Falha ao carregar dados do usuário");
-      } finally {
-        setLoading(false);
+      if (response) {
+        setAllUsers(response);
       }
-    };
+    } catch (err) {
+      console.error("Erro carregando dados:", err);
+      setError("Falha ao carregar dados do usuário");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchUserData();
   }, []);
 
-  return { allUsers, loading, error };
+  const refetch = () => {
+    fetchUserData();
+  };
+
+  return { allUsers, loading, error, refetch };
 }

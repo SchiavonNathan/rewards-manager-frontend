@@ -7,14 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table"
-import { 
   DropdownMenu, 
   DropdownMenuContent, 
   DropdownMenuItem, 
@@ -43,83 +35,16 @@ import {
   UserPlus
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { useTeams } from "@/hooks/useTeamsWithMembers"
 
 export default function AdminTeams() {
-  const [teams] = useState([
-    { 
-      id: "1", 
-      name: "NOC", 
-      membersCount: 8,
-      totalPoints: 12450, 
-      isActive: true,
-      members: [
-        { id: "1", name: "Nathan Lopes", points: 1950 },
-        { id: "6", name: "Ana Carolina", points: 1850 },
-        { id: "7", name: "Pedro Santos", points: 1750 }
-      ]
-    },
-    { 
-      id: "2", 
-      name: "DevOps", 
-      membersCount: 6,
-      totalPoints: 14200, 
-      isActive: true,
-      members: [
-        { id: "2", name: "Marina Silva", points: 2450 },
-        { id: "8", name: "Felipe Martins", points: 2100 }
-      ]
-    },
-    { 
-      id: "3", 
-      name: "Security", 
-      membersCount: 5,
-      totalPoints: 9800, 
-      isActive: true,
-      members: [
-        { id: "3", name: "Carlos Menezes", points: 1750 },
-        { id: "9", name: "Juliana Costa", points: 1600 }
-      ]
-    },
-    { 
-      id: "4", 
-      name: "Support", 
-      membersCount: 10,
-      totalPoints: 15600, 
-      isActive: false,
-      members: [
-        { id: "4", name: "Sandra Pereira", points: 1580 },
-        { id: "10", name: "Roberto Alves", points: 1520 }
-      ]
-    },
-    { 
-      id: "5", 
-      name: "Development", 
-      membersCount: 12,
-      totalPoints: 18900, 
-      isActive: true,
-      members: [
-        { id: "5", name: "João Almeida", points: 1650 },
-        { id: "11", name: "Marcela Lima", points: 1800 }
-      ]
-    },
-  ])
-  
+  const { teams } = useTeams();
   const [searchTerm, setSearchTerm] = useState('')
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
 
   const filteredTeams = teams.filter(team => 
     team.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
-
-  const [expandedTeams, setExpandedTeams] = useState<Record<string, boolean>>({})
-
-  const toggleTeamExpansion = (teamId: string) => {
-    setExpandedTeams(prev => ({
-      ...prev,
-      [teamId]: !prev[teamId]
-    }))
-  }
 
   return (
     <div className="flex-1 space-y-4 p-6">
@@ -197,16 +122,12 @@ export default function AdminTeams() {
                             {team.isActive ? "Ativo" : "Inativo"}
                           </Badge>
                         </CardTitle>
-                        <CardDescription>
-                          {team.membersCount} membros • {team.totalPoints.toLocaleString()} pontos
-                        </CardDescription>
+
                       </div>
                     </div>
                     
                     <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm" onClick={() => toggleTeamExpansion(team.id)}>
-                        {expandedTeams[team.id] ? "Ocultar Membros" : "Ver Membros"}
-                      </Button>
+
                       
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -233,42 +154,6 @@ export default function AdminTeams() {
                     </div>
                   </div>
                 </CardHeader>
-                
-                {expandedTeams[team.id] && (
-                  <CardContent className="pt-4">
-                    <h4 className="text-sm font-semibold mb-2">Membros da Equipe</h4>
-                    <div className="rounded-md border">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Nome</TableHead>
-                            <TableHead className="text-right">Pontos</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {team.members.map(member => (
-                            <TableRow key={member.id}>
-                              <TableCell className="flex items-center gap-2">
-                                <Avatar className="h-6 w-6">
-                                  <AvatarFallback className="text-xs">
-                                    {member.name.substring(0, 2).toUpperCase()}
-                                  </AvatarFallback>
-                                </Avatar>
-                                <span>{member.name}</span>
-                              </TableCell>
-                              <TableCell className="text-right">{member.points.toLocaleString()}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                    <div className="mt-2 text-right">
-                      <Button variant="link" size="sm" className="h-auto p-0">
-                        Ver todos os membros
-                      </Button>
-                    </div>
-                  </CardContent>
-                )}
               </Card>
             ))}
             

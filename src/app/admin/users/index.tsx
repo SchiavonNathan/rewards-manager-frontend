@@ -32,14 +32,40 @@ import {
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { useAllUsers } from "@/hooks/useAllUsers"
-import { useTeams } from "@/hooks/useTeams"
+import { useTeams } from "@/hooks/useTeamsWithMembers"
 import { CreateUserModal } from "@/components/create-user-modal"
+import { UpdateUserModal } from "@/components/update-user-modal"
+import type { User } from "@/services/userService"
+import { useDeleteUser } from "@/hooks/useDeleteUser"
+
 
 
 export default function AdminUsers() {
-  const { allUsers } = useAllUsers();
+  const { allUsers, refetch } = useAllUsers();
   const [searchTerm, setSearchTerm] = useState('')
   const { teams } = useTeams();
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const { deleteUser } = useDeleteUser();
+
+  const handleEditUser = (user: User) => {
+    setEditingUser(user);
+    setIsUpdateModalOpen(true);
+  };
+
+  const handleDeleteUser = (user: User) => {
+    deleteUser(user.id)
+    refetch();
+  };
+
+  const handleCloseUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+    setEditingUser(null);
+  };
+
+  const handleUpdateSuccess = () => {
+    refetch();
+  };
 
   const filteredUsers = allUsers?.filter(user => 
     user?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -120,11 +146,17 @@ export default function AdminUsers() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem className="cursor-pointer">
+                          <DropdownMenuItem 
+                            className="cursor-pointer"
+                            onClick={() => user && handleEditUser(user)}
+                          >
                             <Edit className="mr-2 h-4 w-4" />
                             Editar
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="cursor-pointer text-red-600">
+                          <DropdownMenuItem 
+                            className="cursor-pointer text-red-600"
+                            onClick={() => user && handleDeleteUser(user)}  
+                          >
                             <Trash2 className="mr-2 h-4 w-4" />
                             Excluir
                           </DropdownMenuItem>
@@ -145,6 +177,17 @@ export default function AdminUsers() {
           </div>
         </CardContent>
       </Card>
+      
+      {/* Update User Modal */}
+      {editingUser && (
+        <UpdateUserModal
+          teams={teams || []}
+          user={editingUser}
+          isOpen={isUpdateModalOpen}
+          onClose={handleCloseUpdateModal}
+          onSuccess={handleUpdateSuccess}
+        />
+      )}
     </div>
   )
 }

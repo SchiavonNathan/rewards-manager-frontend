@@ -22,9 +22,7 @@ import {
   Users,
   Flame,
 } from "lucide-react"
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@radix-ui/react-separator";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+
 
 type MissionDifficulty = "easy" | "medium" | "hard" | "extreme";
 type MissionStatus = "active" | "completed" | "upcoming";
@@ -144,28 +142,6 @@ export default function Missions() {
 
   return (
     <div className="flex flex-col p-6">
-      <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-      <div className="flex items-center gap-2 px-4">
-        <SidebarTrigger className="-ml-1" />
-          <Separator
-            orientation="vertical"
-            className="mr-2 data-[orientation=vertical]:h-4"
-          />
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href="/home">
-                Trade Rewards
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          <BreadcrumbSeparator className="hidden md:block" />
-        <BreadcrumbItem>
-          <BreadcrumbPage>Missões</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-      </header>
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold flex items-center gap-2">
@@ -188,7 +164,7 @@ export default function Missions() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex flex-col">
               <span className="text-sm text-muted-foreground">Missões Ativas</span>
               <span className="text-2xl font-bold">{activeMissions.length}</span>
@@ -197,12 +173,7 @@ export default function Missions() {
               <span className="text-sm text-muted-foreground">Missões Concluídas</span>
               <span className="text-2xl font-bold">{completedMissions.length}</span>
             </div>
-            <div className="flex flex-col">
-              <span className="text-sm text-muted-foreground">Pontos Potenciais</span>
-              <span className="text-2xl font-bold">
-                {activeMissions.reduce((sum, mission) => sum + mission.points, 0).toLocaleString()}
-              </span>
-            </div>
+
           </div>
         </CardContent>
       </Card>

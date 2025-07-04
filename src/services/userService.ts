@@ -1,12 +1,7 @@
 import api from "@/lib/api";
+import type { Team } from "./teamService";
 
-export interface Team {
-  id: string;
-  name: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+
 
 export interface User {
   id: string;
@@ -57,4 +52,21 @@ export const userService = {
       throw new Error("Ocorreu um erro ao criar o usuário.");
     }
   },
+
+  async update(id: string, user: Partial<UserCreate>): Promise<User> {
+    try {
+      const response = await api.patch(`/users/${id}`, user);
+      return response.data;
+    } catch {
+      throw new Error("Ocorreu um erro ao atualizar o usuário.");
+    }
+  },
+
+  async delete(id: string): Promise<void> {
+    try {
+      await api.delete(`/users/${id}`);
+    } catch {
+      throw new Error("Ocorreu um erro ao excluir o usuário.");
+    }
+  }
 };

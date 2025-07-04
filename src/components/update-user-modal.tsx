@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,7 +6,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -18,47 +17,57 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { UserPlus } from "lucide-react";
-import { useCreateUser } from "@/hooks/useCreateUser";
 import type { Errors } from "@/types/errors.types";
-import { useAllUsers } from "@/hooks/useAllUsers";
+import { useUpdateUser } from "@/hooks/useUpdateUser";
+import type { User, UserCreate } from "@/services/userService";
 
 interface Team {
   id: string;
   name: string;
 }
 
-interface CreateUserModalProps {
+interface UpdateUserModalProps {
   teams: Team[];
+  user: User;
+  isOpen: boolean;
+  onClose: () => void;
+  onSuccess?: () => void;
 }
 
-export function CreateUserModal({ teams }: CreateUserModalProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [username, setUsername] = useState('');
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [team, setTeam] = useState('');
-  const [role, setRole] = useState('USER');
+export function UpdateUserModal({ teams, user, isOpen, onClose, onSuccess }: UpdateUserModalProps) {
+  const [username, setUsername] = useState(user.username);
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+  const [team, setTeam] = useState(user.team?.id || '');
+  const [role, setRole] = useState(user.role);
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<Errors>({});
-  const { refetch } = useAllUsers();
 
-  const { createUser } = useCreateUser();
+  const { updateUser } = useUpdateUser();
+
+  useEffect(() => {
+    setUsername(user.username);
+    setName(user.name);
+    setEmail(user.email);
+    setTeam(user.team?.id || '');
+    setRole(user.role);
+    setPassword('');
+    setErrors({});
+  }, [user]);
 
   const resetForm = () => {
-    setUsername('');
-    setName('');
-    setEmail('');
-    setTeam('');
-    setRole('USER');
+    setUsername(user.username);
+    setName(user.name);
+    setEmail(user.email);
+    setTeam(user.team?.id || '');
+    setRole(user.role);
     setPassword('');
     setErrors({});
   };
 
-  const handleAddUser = async (event: React.FormEvent) => {
+  const handleUpdateUser = async (event: React.FormEvent) => {
     event.preventDefault();
     
-    //Validacao campos
     const newErrors: Errors = {};
     if (!name.trim()) newErrors.name = "O nome completo é obrigatório.";
     if (!email.trim()) {
@@ -67,7 +76,6 @@ export function CreateUserModal({ teams }: CreateUserModalProps) {
       newErrors.email = "O formato do email é inválido.";
     }
     if (!username.trim()) newErrors.username = "O username é obrigatório.";
-    if (!password) newErrors.password = "A senha é obrigatória.";
     if (!team) newErrors.team = "A seleção de uma equipe é obrigatória.";
 
     if (Object.keys(newErrors).length > 0) {
@@ -76,39 +84,45 @@ export function CreateUserModal({ teams }: CreateUserModalProps) {
     }
     setErrors({});
     
-    const userPayload = { username, name, email, teamId: team, role, points: 0, password };
+    const userPayload: Partial<UserCreate> = { 
+      username, 
+      name, 
+      email, 
+      teamId: team, 
+      role 
+    };
+
+    if (password.trim()) {
+      userPayload.password = password;
+    }
 
     try {
-      await createUser(userPayload);
-      console.log("Usuário adicionado com sucesso:", userPayload);
-      setIsOpen(false);
-      refetch();
+      await updateUser(userPayload, user.id);
+      console.log("Usuário atualizado com sucesso:", userPayload);
+      onClose();
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (err) {
-      console.error("Falha ao adicionar usuário:", err);
-      setErrors({ form: "Ocorreu um erro ao salvar o usuário. Tente novamente." });
+      console.error("Falha ao atualizar usuário:", err);
+      setErrors({ form: "Ocorreu um erro ao atualizar o usuário. Tente novamente." });
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(isOpen) => {
-          setIsOpen(isOpen);
-          if (!isOpen) {
+    <Dialog open={isOpen} onOpenChange={(open) => {
+          if (!open) {
             resetForm();
             setErrors({});
+            onClose();
           }
         }}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
-              <UserPlus className="h-4 w-4" />
-              Adicionar Usuário
-            </Button>
-          </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
-            <form onSubmit={handleAddUser}>
+            <form onSubmit={handleUpdateUser}>
             <DialogHeader>
-              <DialogTitle>Adicionar novo usuário</DialogTitle>
+              <DialogTitle>Editar usuário</DialogTitle>
               <DialogDescription>
-                Preencha os dados abaixo para criar um novo usuário.
+                Atualize os dados do usuário {user.name}.
               </DialogDescription>
             </DialogHeader>
               <div className="grid gap-4 py-4">
@@ -141,10 +155,10 @@ export function CreateUserModal({ teams }: CreateUserModalProps) {
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="password" className="text-right">
-                    Senha
+                    Nova Senha
                   </Label>
                   <div className="col-span-3">
-                    <Input id="password" type="password" placeholder="Digite a senha" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <Input id="password" type="password" placeholder="Deixe vazio para manter a atual" value={password} onChange={(e) => setPassword(e.target.value)} />
                     {errors.password && <p className="text-sm text-red-500 mt-1">{errors.password}</p>}
                   </div>
                 </div>
@@ -158,9 +172,9 @@ export function CreateUserModal({ teams }: CreateUserModalProps) {
                         <SelectValue placeholder="Selecione uma equipe" />
                       </SelectTrigger>
                       <SelectContent>
-                        {teams.map((team) => (
-                          <SelectItem key={team.id} value={team.id}>
-                            {team.name}
+                        {teams.map((teamItem) => (
+                          <SelectItem key={teamItem.id} value={teamItem.id}>
+                            {teamItem.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -185,7 +199,14 @@ export function CreateUserModal({ teams }: CreateUserModalProps) {
               </div>
             {errors.form && <p className="text-sm text-red-500 text-center mb-2">{errors.form}</p>}
             <DialogFooter>
-            <Button type="submit">Salvar</Button>
+            <Button type="submit">Atualizar</Button>
+            <Button type="button" variant="outline" onClick={() => {
+              resetForm();
+              setErrors({});
+              onClose();
+            }}>
+              Cancelar
+            </Button>
             </DialogFooter>
             </form>
           </DialogContent>
