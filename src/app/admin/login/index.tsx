@@ -1,4 +1,4 @@
-import { AdminLoginForm } from "@/components/admin-login-form"
+import { AdminLoginForm } from "@/components/admin/auth/admin-login-form"
 import { motion } from "framer-motion"
 import { Shield, Lock } from "lucide-react"
 

@@ -8,7 +8,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Trophy, Users, Medal, AlertCircle } from "lucide-react"
-import { useTeams } from "@/hooks/useTeamsWithMembers"
+import { useTeams } from "@/hooks/team/useTeams"
 
 export default function Ranking() {
   const { teams, loading, error } = useTeams();

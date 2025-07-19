@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useUserData } from "@/hooks/useUserData"
+import { useUserData } from "@/hooks/user/useUserData"
 import {
   Atom,
   Frame,
@@ -11,10 +11,10 @@ import {
   Trophy,
 } from "lucide-react"
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/components/user/sidebar/nav-main"
+import { NavProjects } from "@/components/user/sidebar/nav-projects"
+import { NavSecondary } from "@/components/user/sidebar/nav-secondary"
+import { NavUser } from "@/components/user/sidebar/nav-user"
 import {
   Sidebar,
   SidebarContent,

@@ -4,9 +4,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { useMissions } from "@/hooks/useMissions";
-import { useRewards } from "@/hooks/useRewards";
-import { useUserFullData } from "@/hooks/useUserFullData";
+import { useMissions } from "@/hooks/mission/useMissions";
+import { useRewards } from "@/hooks/reward/useRewards";
+import { useUserFullData } from "@/hooks/user/useUserFullData";
 import { SquareTerminal, Trophy } from "lucide-react"
 
 export default function Home() {

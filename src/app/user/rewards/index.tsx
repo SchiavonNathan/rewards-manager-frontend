@@ -41,7 +41,7 @@ import {
 } from "lucide-react";
 
 // Import the hook and service
-import { useRewards } from "@/hooks/useRewards";
+import { useRewards } from "@/hooks/reward/useRewards";
 import type { Reward as ApiReward } from "@/services/rewardService";
 
 // Create a type that extends the API reward type with UI-specific fields

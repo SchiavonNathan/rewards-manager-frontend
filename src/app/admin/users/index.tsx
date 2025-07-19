@@ -32,12 +32,12 @@ import {
   UserPlus
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { useAllUsers } from "@/hooks/useAllUsers"
-import { useTeams } from "@/hooks/useTeamsWithMembers"
-import { CreateUserModal } from "@/components/create-user-modal"
-import { UpdateUserModal } from "@/components/update-user-modal"
+import { useAllUsers } from "@/hooks/user/useAllUsers"
+import { useTeams } from "@/hooks/team/useTeams"
+import { CreateUserModal } from "@/components/admin/user/create-user-modal"
+import { UpdateUserModal } from "@/components/admin/user/update-user-modal"
 import type { User } from "@/services/userService"
-import { useDeleteUser } from "@/hooks/useDeleteUser"
+import { useDeleteUser } from "@/hooks/user/useDeleteUser"
 import {
   AlertDialog,
   AlertDialogAction,

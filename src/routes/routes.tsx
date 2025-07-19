@@ -1,12 +1,12 @@
 import AdminDashboard from '@/app/admin/dashboard';
-import AdminLayout from '@/components/admin-layout';
+import AdminLayout from '@/components/layout/admin-layout';
 import AdminLoginPage from '@/app/admin/login';
 import AdminUsers from '@/app/admin/users'; 
 import Home from '@/app/user/home';
 import LoginPage from '@/app/user/login';
 import Missions from '@/app/user/missions';
 import Ranking from '@/app/user/ranking';
-import RootLayout from '@/components/layout';
+import RootLayout from '@/components/layout/layout';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AdminTeams from '@/app/admin/teams';

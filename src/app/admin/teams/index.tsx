@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { 
   Card, 
   CardContent, 
@@ -32,15 +32,26 @@ import {
   UsersIcon,
   Filter,
   Users,
-  UserPlus
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { useTeams } from "@/hooks/useTeamsWithMembers"
+import { useTeams } from "@/hooks/team/useTeams"
 
 export default function AdminTeams() {
-  const { teams } = useTeams();
+  const { teams, isLoading, error, getTeams, createTeam } = useTeams();
   const [searchTerm, setSearchTerm] = useState('')
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+
+  useEffect(() => {
+    getTeams();
+  }, [getTeams]);
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
+
+  if (error) {
+    return <div>Erro: {error}</div>;
+  }
 
   const filteredTeams = teams.filter(team => 
     team.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -140,10 +151,6 @@ export default function AdminTeams() {
                           <DropdownMenuItem className="cursor-pointer">
                             <Edit className="mr-2 h-4 w-4" />
                             Editar
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="cursor-pointer">
-                            <UserPlus className="mr-2 h-4 w-4" />
-                            Adicionar Membro
                           </DropdownMenuItem>
                           <DropdownMenuItem className="cursor-pointer text-red-600">
                             <Trash2 className="mr-2 h-4 w-4" />

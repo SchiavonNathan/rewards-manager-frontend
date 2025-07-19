@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import type { Errors } from "@/types/errors.types";
-import { useUpdateUser } from "@/hooks/useUpdateUser";
+import { useUpdateUser } from "@/hooks/user/useUpdateUser";
 import type { User, UserCreate } from "@/services/userService";
 
 interface Team {

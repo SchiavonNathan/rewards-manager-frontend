@@ -2,10 +2,10 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/hooks/auth/useAuth"
 import { useState } from "react"
 
-export function AdminLoginForm({
+export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
@@ -49,7 +49,7 @@ export function AdminLoginForm({
           <Input id="password" type="password" placeholder="*******" required value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} />
         </div>
         {error && <p className="text-sm text-red-500">{error}</p>}
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
           {isLoading ? "Entrando..." : "Login"}
         </Button>
       </div>

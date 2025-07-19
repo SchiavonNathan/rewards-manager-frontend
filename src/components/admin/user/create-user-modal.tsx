@@ -17,9 +17,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useCreateUser } from "@/hooks/useCreateUser";
+import { useCreateUser } from "@/hooks/user/useCreateUser";
 import type { Errors } from "@/types/errors.types";
-import { useAllUsers } from "@/hooks/useAllUsers";
+import { useAllUsers } from "@/hooks/user/useAllUsers";
 
 interface Team {
   id: string;

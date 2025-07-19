@@ -1,4 +1,4 @@
-import { useMissions } from "@/hooks/useMissions";
+import { useMissions } from "@/hooks/mission/useMissions";
 import { useEffect, useState } from "react";
 import { type Mission as ApiMission } from "@/services/missionService";
 import {
