@@ -1,4 +1,4 @@
-import { LoginForm } from "@/components/login-form"
+import { LoginForm } from "@/components/user/auth/login-form"
 import { motion } from "framer-motion"
 import { Atom } from "lucide-react"
 

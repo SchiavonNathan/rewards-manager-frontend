@@ -1,4 +1,4 @@
-import { AdminSidebar } from "@/components/admin-sidebar"
+import { AdminSidebar } from "@/components/admin/sidebar/admin-sidebar"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { Outlet } from "react-router-dom"
 

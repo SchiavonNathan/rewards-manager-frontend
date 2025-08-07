@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useUserData } from "@/hooks/useUserData"
+import { useUserData } from "@/hooks/user/useUserData"
 import {
   LayoutDashboard,
   Users,
@@ -19,7 +19,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { NavUser } from "@/components/nav-user"
+import { NavUser } from "@/components/user/sidebar/nav-user"
 
 // Items específicos para os menus do admin
 const adminNavItems = {
